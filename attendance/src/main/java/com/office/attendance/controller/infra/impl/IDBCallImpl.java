@@ -2,6 +2,7 @@ package com.office.attendance.controller.infra.impl;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.YearMonth;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,14 @@ public class IDBCallImpl implements IDBCall {
 
 	@Override
 	public Dto getEmployeeAttendanceDBCall(Dto dto) {
-		LocalDate currentDate = LocalDate.now();
-		LocalDate dateMinusThreeMonths = currentDate.minus(Period.ofMonths(12));
-		ArrayList<GetAttendanceResponse> getAttendanceResponseList = iAttendace.getEmployeeAttendance(dto.getGetEmployeeAttendanceRequest().getEmployeeRef(), dateMinusThreeMonths,currentDate );
+		LocalDate startDate = dto.getGetEmployeeAttendanceRequest().getAttendanceForDate().withDayOfMonth(1);
+		System.out.println(startDate);
+		int year = startDate.getYear();
+	    int month = startDate.getMonthValue();
+	    YearMonth yearMonth = YearMonth.of(year, month);
+	    int daysInMonth = yearMonth.lengthOfMonth();
+		LocalDate endDate = dto.getGetEmployeeAttendanceRequest().getAttendanceForDate().withDayOfMonth(daysInMonth);
+		ArrayList<GetAttendanceResponse> getAttendanceResponseList = iAttendace.getEmployeeAttendance(dto.getGetEmployeeAttendanceRequest().getEmployeeRef(), startDate,endDate );
 		GetAttendanceResponseList getAttendanceResponseList2 = new GetAttendanceResponseList();
 		getAttendanceResponseList2.setGetAttendanceResponseList(getAttendanceResponseList);
 		dto.setGetAttendanceResponseList(getAttendanceResponseList2);

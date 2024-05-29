@@ -1,9 +1,12 @@
 package com.office.attendance.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.office.attendance.controller.domain.businessservice.AttendanceService;
@@ -14,6 +17,7 @@ import com.office.attendance.infra.response.AttendanceResponse;
 import com.office.attendance.infra.response.GetAttendanceResponse;
 import com.office.attendance.infra.response.GetAttendanceResponseList;
 
+@CrossOrigin(origins="http://localhost:3000/")
 @RestController
 @RequestMapping("/attendance")
 public class AttendanceContoller {
@@ -43,5 +47,13 @@ public class AttendanceContoller {
 		dto = attendanceService.getEmployeeAttendanceDetails(dto);
 		return dto.getGetAttendanceResponseList();
 	}
+	@GetMapping("/getAttendanceForEmployee1")
+	public GetAttendanceResponseList getAttendanceForEmployee1(@RequestParam GetEmployeeAttendanceRequest getEmployeeAttendanceRequest) {
+		Dto dto = new Dto();
+		dto.setGetEmployeeAttendanceRequest(getEmployeeAttendanceRequest);
+		dto = attendanceService.getEmployeeAttendanceDetails(dto);
+		return dto.getGetAttendanceResponseList();
+	}
+	
 	
 }
